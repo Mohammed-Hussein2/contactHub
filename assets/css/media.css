@@ -1,0 +1,48 @@
+@media screen and (max-width: 640px) {
+  #header .logo-container .logo-description,
+  #header .actions-container .btn {
+    display: none;
+  }
+
+  #header .logo-container .logo-iconBox {
+    width: 40px;
+    height: 40px;
+  }
+
+  #header .logo-container .logo-title {
+    font-size: 20px;
+  }
+
+  #header .actions-container {
+    gap: 8px;
+  }
+
+  #header .actions-container .add-contact-btn .contact-text {
+    display: none;
+  }
+
+  #header .actions-container .add-contact-btn {
+    padding-inline: 16px;
+  }
+
+  #status_cards .col_card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  #status_cards .col_card .card_icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  #status_cards .col_card .card_content p#total_number {
+    font-size: 20px;
+  }
+
+  #contact_area .contact_header h2 {
+    font-size: 24px;
+  }
+  .contact_cards {
+    grid-template-columns: repeat(1, minmax(0px, 1fr));
+  }
+}

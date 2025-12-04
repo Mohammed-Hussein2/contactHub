@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Fonts ( Inter ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Reboot -->
+    <link rel="stylesheet" href="assets/css/bootstrap-reboot.min.css" />
+    <!-- Bootstrap Grid System -->
+    <link rel="stylesheet" href="assets/css/bootstrap-grid.min.css" />
+    <!-- Font Awesome Style  -->
+    <link rel="stylesheet" href="assets/css/all.min.css" />
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <!-- Custom responsive Style -->
+    <link rel="stylesheet" href="assets/css/media.css" />
+    <title>ContactHub</title>
+  </head>
+  <body>
+    <header id="header">
+      <nav class="container">
+        <div class="logo-container">
+          <div class="logo-iconBox">
+            <span class="fa-solid fa-address-book"></span>
+          </div>
+          <div class="logo-textBox">
+            <h1 class="logo-title">Contact<span>Hub</span></h1>
+            <p class="logo-description">Smart Contact Manager</p>
+          </div>
+        </div>
+
+        <div class="actions-container">
+          <button
+            onclick="openModal()"
+            type="button"
+            class="add-contact-btn"
+            id="addContactBtn"
+          >
+            <span class="fa-solid fa-plus"></span>
+            <span>Add <span class="contact-text">Contact</span></span>
+          </button>
+
+          <button class="btn notification">
+            <i class="fa-solid fa-bell"></i>
+          </button>
+
+          <button class="btn setting">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+
+          <div class="user-img-box">
+            <img src="assets/images/avatar.jpg" alt="user image" />
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="main_content">
+      <section>
+        <div class="container">
+          <div class="row g-3" id="status_cards">
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="col_card">
+                <div class="card_icon users">
+                  <span class="fa-solid fa-users"></span>
+                </div>
+                <div class="card_content">
+                  <p>Total</p>
+                  <p id="total_number">0</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="col_card">
+                <div class="card_icon star">
+                  <span class="fa-solid fa-star"></span>
+                </div>
+                <div class="card_content">
+                  <p>Favorites</p>
+                  <p id="total_number">0</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="col_card">
+                <div class="card_icon heart">
+                  <span class="fa-solid fa-heart-pulse"></span>
+                </div>
+                <div class="card_content">
+                  <p>Emergency</p>
+                  <p id="total_number">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact_area">
+        <div class="container">
+          <div class="row g-3">
+            <div class="col-12 col-lg-8">
+              <div class="contact_header">
+                <h2>All Contacts</h2>
+                <p id="totalContact"></p>
+                <div class="search_box">
+                  <input
+                    type="search"
+                    placeholder="Search by name, phone, or email..."
+                    id="search_input"
+                  />
+                  <span class="fa-solid fa-search"></span>
+                </div>
+              </div>
+              <div class="contact_cards" id="contact_cards"></div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <div class="sticky">
+                <div class="favorite_card">
+                  <div class="inner">
+                    <div class="header">
+                      <div class="icon">
+                        <span class="fa-solid fa-star"></span>
+                      </div>
+                      <div class="text">
+                        <h2>Favorites</h2>
+                        <p>Quick access to starred contacts</p>
+                      </div>
+                    </div>
+                    <div class="contact_items" id="favorite_item"></div>
+                  </div>
+                </div>
+                <div class="emergency_card">
+                  <div class="inner">
+                    <div class="header">
+                      <div class="icon">
+                        <span class="fa-solid fa-heart-pulse"></span>
+                      </div>
+                      <div class="text">
+                        <h2>Emergency</h2>
+                        <p>Important contacts for urgent calls</p>
+                      </div>
+                    </div>
+                    <div class="contact_items" id="emergency_item"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Model Form  -->
+    <div class="form_modal" id="contact_modal">
+      <div class="layer">
+        <div class="inner">
+          <div class="modal_header">
+            <h3>Add New Contact</h3>
+            <span onclick="closeModal() " class="close_modal">
+              <i class="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+          <div class="modal_body">
+            <form>
+              <div class="image_box">
+                <div class="icon">
+                  <span class="fa-solid fa-user"></span>
+                </div>
+                <label for="image">
+                  <span class="fa-solid fa-camera"></span>
+                  change photo
+                </label>
+                <input
+                  type="file"
+                  id="image"
+                  accept="image/*"
+                  style="display: none"
+                />
+              </div>
+              <!-- input Name -->
+              <div class="form_input">
+                <label for="contactName">Full Name <span> * </span> </label>
+                <input
+                  type="text"
+                  id="contactName"
+                  placeholder="Enter full name"
+                />
+              </div>
+              <!-- Number -->
+              <div class="form_input">
+                <label for="contactPhone">
+                  Phone Number <span> * </span>
+                </label>
+                <input
+                  type="text"
+                  id="contactPhone"
+                  placeholder="e.g., 01141547840"
+                />
+              </div>
+              <!-- Email -->
+              <div class="form_input">
+                <label for="contactEmail"> Email Address </label>
+                <input
+                  type="text"
+                  id="contactEmail"
+                  placeholder="emailExample@gmail.com"
+                />
+              </div>
+              <!-- Address -->
+              <div class="form_input">
+                <label for="contactAddress">Address </label>
+                <input
+                  type="text"
+                  id="contactAddress"
+                  placeholder="Enter Address"
+                />
+              </div>
+              <!-- Category Group -->
+              <div class="form_input">
+                <label for="contactGroup">Group</label>
+                <select name="contactGroup" id="contactGroup">
+                  <option value="">Select a group</option>
+                  <option value="family">Family</option>
+                  <option value="friends">Friends</option>
+                  <option value="work">Work</option>
+                  <option value="school">School</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <!-- Notes -->
+              <div class="form_input">
+                <label for="contactNotes">Address </label>
+                <textarea
+                  name="contactNotes"
+                  id="contactNotes"
+                  rows="2"
+                  placeholder="Add notes about this contact"
+                ></textarea>
+              </div>
+
+              <!-- Favorite and Emergency -->
+              <div class="check_box">
+                <label for="favorite" class="favorite">
+                  <input type="checkbox" id="favorite" name="favorite" />
+                  <span>
+                    <i class="fa-solid fa-star"></i>
+                    Favorite
+                  </span>
+                </label>
+
+                <label for="emergency" class="favorite">
+                  <input type="checkbox" id="emergency" name="emergency" />
+                  <span>
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    Emergency
+                  </span>
+                </label>
+              </div>
+
+              <!-- buttons Actions -->
+              <div class="form_btns">
+                <button
+                  onclick="closeModal()"
+                  type="button"
+                  class="cancelContact"
+                >
+                  Cancel
+                </button>
+                <button
+                  onclick="createContact()"
+                  type="button"
+                  id="createContactBtn"
+                  class="saveContact"
+                >
+                  Save Contact
+                </button>
+                <button
+                  onclick="updateContact()"
+                  type="button"
+                  id="updateContactBtn"
+                  class="saveContact hidden"
+                >
+                  Update Contact
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
