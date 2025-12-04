@@ -478,3 +478,128 @@ function getFirstCharFromName(index, list) {
   }
   return characterName.toLocaleUpperCase();
 }
+
+function search() {
+  var searchInput = document.getElementById("search_input").value.trim();
+  console.log(searchInput);
+
+  var box = "";
+  if (contactList.length == 0) {
+    box = `<div class="no_contact">
+                  <div class="icon">
+                    <span class="fa-solid fa-address-book"></span>
+                  </div>
+                  <h3>No contacts found</h3>
+                  <p>Click "Add Contact" to get started</p>
+                </div>`;
+  }
+
+  for (let i = 0; i < contactList.length; i++) {
+    if (
+      contactList[i].name.toLowerCase().includes(searchInput.toLowerCase()) ||
+      contactList[i].phone.includes(searchInput) ||
+      contactList[i].email.toLowerCase().includes(searchInput.toLowerCase())
+    ) {
+      // Toggle show emergency Budge
+      var emergency = "";
+      if (contactList[i].emergency) {
+        emergency = `  <div class="budge budge_emergency">
+                        <span class="fa-solid fa-heart-pulse"></span>
+                        <span>Emergency</span>
+                      </div>`;
+      }
+      console.log();
+
+      box += `
+              <div class="contact_card">
+                  <div class="contact_content">
+                    <div class="user_info">
+                      <div class="icon">
+                        <span>${getFirstCharFromName(i, contactList)}</span>
+                      </div>
+                      <div>
+                        <h4>${contactList[i].name}</h4>
+                        <div class="phone_number">
+                          <span class="icon_phone">
+                            <i class="fa-solid fa-phone"></i>
+                          </span>
+                          <span class="phone">${contactList[i].phone}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="email_box">
+                      
+                      ${
+                        contactList[i].email
+                          ? `<span>
+                        <i class="fa-solid fa-envelope"></i>
+                      </span>`
+                          : ""
+                      }
+                      <p>${contactList[i].email}</p>
+                    </div>
+                    <div class="location_box">
+                       
+                      ${
+                        contactList[i].address
+                          ? `<span>
+                        <i class="fa-solid fa-location-dot"></i>
+                      </span>`
+                          : ""
+                      }
+                      <p>${contactList[i].address}</p>
+                    </div>
+                    <div class="budges">
+                      <div class="budge budge_${contactList[i].group}">${
+        contactList[i].group
+      }</div>
+                        ${emergency}
+                    </div>
+                  </div>
+                  <div class="card_footer">
+                    <div class="call_icons">
+                      <a href="tel:${
+                        contactList[i].phone
+                      }" class="phone" title="call">
+                        <i class="fa-solid fa-phone"></i>
+                      </a>
+                      <a href="mailto:${
+                        contactList[i].email
+                      }" class="envelope" title="email">
+                        <i class="fa-solid fa-envelope"></i>
+                      </a>
+                    </div>
+
+                    <div class="action_icons">
+                      <button onclick='toggleFavoriteValue(${i})'  class="favorite ${
+        contactList[i].favorite ? "checked" : ""
+      }">
+                        <span class="fa-${
+                          contactList[i].favorite ? "solid" : "regular"
+                        }
+                       fa-star"></span>
+                      </button>
+                      <button onclick='toggleEmergencyValue(${i})'   class="emergency ${
+        contactList[i].emergency ? "checked" : ""
+      }">
+                        <span class="${
+                          contactList[i].emergency
+                            ? "fa-solid fa-heart-pulse"
+                            : "fa-regular fa-heart"
+                        } "></span>
+                      </button>
+                      <button class="edit" onclick='setValuesForUpdateContact(${i})'>
+                        <span class="fa-solid fa-pen"></span>
+                      </button>
+                      <button class="delete" onclick='deleteContact(${i})'  >
+                        <span class="fa-solid fa-trash"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+     `;
+    }
+  }
+
+  contactContainer.innerHTML = box;
+}
