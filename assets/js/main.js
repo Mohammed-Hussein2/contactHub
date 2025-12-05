@@ -40,7 +40,7 @@ function closeModal() {
 function clearInputsForm() {
   contactName.value = "";
   contactPhone.value = "";
-  contactEmail.value = "l";
+  contactEmail.value = "";
   contactAddress.value = "";
   contactGroup.value = "";
   contactNotes.value = "";
@@ -49,10 +49,9 @@ function clearInputsForm() {
 }
 
 function validationForm() {
-  var phonePattern = /^(\+20|0020|20)?0?1[0125][0-9]{8}$/;
+  var phonePattern = /^(\+20|0020|20)?01[0125][0-9]{8}$/;
   var phone = contactPhone.value.trim();
   var name = contactName.value.trim();
-  console.log(name.length);
 
   if (name.length == 0) {
     Swal.fire({
@@ -92,7 +91,7 @@ function validationForm() {
 
   return true;
 }
-
+// get Value From Inputs And save It in localStorage
 function createContact() {
   updateContactBtn.classList.add("hidden");
   if (validationForm() === true) {
@@ -119,8 +118,10 @@ function createContact() {
   }
 }
 
+
 function displayContact() {
   var box = "";
+
   if (contactList.length == 0) {
     box = `<div class="no_contact">
                   <div class="icon">
@@ -132,22 +133,27 @@ function displayContact() {
   }
 
   for (let i = 0; i < contactList.length; i++) {
-    // Toggle show emergency Budge
-    var emergency = "";
-    if (contactList[i].emergency) {
-      emergency = `  <div class="budge budge_emergency">
-                        <span class="fa-solid fa-heart-pulse"></span>
-                        <span>Emergency</span>
-                      </div>`;
-    }
-    console.log();
-
     box += `
               <div class="contact_card">
                   <div class="contact_content">
                     <div class="user_info">
                       <div class="icon">
                         <span>${getFirstCharFromName(i, contactList)}</span>
+                        ${
+                          contactList[i].favorite
+                            ? `<span class="favorite_icon">
+                                    <i class="fa-solid fa-star"></i>
+                                </span>`
+                            : ""
+                        }
+                        ${
+                          contactList[i].emergency
+                            ? `  <span class="emergency_icon">
+                                    <i class="fa-solid fa-heart-pulse"></i>
+                                  </span>`
+                            : ""
+                        }
+                       
                       </div>
                       <div>
                         <h4>${contactList[i].name}</h4>
@@ -185,7 +191,14 @@ function displayContact() {
                       <div class="budge budge_${contactList[i].group}">${
       contactList[i].group
     }</div>
-                        ${emergency}
+                        ${
+                          contactList[i].emergency
+                            ? `  <div class="budge budge_emergency">
+                                            <span class="fa-solid fa-heart-pulse"></span>
+                                            <span>Emergency</span>
+                                          </div>`
+                            : ""
+                        }
                     </div>
                   </div>
                   <div class="card_footer">
@@ -195,11 +208,14 @@ function displayContact() {
                       }" class="phone" title="call">
                         <i class="fa-solid fa-phone"></i>
                       </a>
-                      <a href="mailto:${
+                      ${
                         contactList[i].email
-                      }" class="envelope" title="email">
+                          ? `  <a href="mailto:${contactList[i].email}" class="envelope" title="email">
                         <i class="fa-solid fa-envelope"></i>
-                      </a>
+                      </a>`
+                          : ""
+                      }
+                    
                     </div>
 
                     <div class="action_icons">
@@ -239,6 +255,7 @@ function displayContact() {
   showNumbers();
 }
 
+// Show Favorite Contacts
 function displayFavoriteContact() {
   var box = "";
   var favoriteList = [];
@@ -288,7 +305,15 @@ function displayFavoriteContact() {
 
   favoriteItem.innerHTML = box;
 }
+// change favorite  values
+function toggleFavoriteValue(index) {
+  contactList[index].favorite = !contactList[index].favorite;
+  localStorage.setItem("contactList", JSON.stringify(contactList));
 
+  displayContact();
+}
+
+// Show Emergency Contacts
 function displayEmergencyContact() {
   var box = "";
   var emergencyList = [];
@@ -334,7 +359,15 @@ function displayEmergencyContact() {
   }
   emergencyItem.innerHTML = box;
 }
+// change emergency values
+function toggleEmergencyValue(index) {
+  contactList[index].emergency = !contactList[index].emergency;
 
+  localStorage.setItem("contactList", JSON.stringify(contactList));
+  displayContact();
+}
+
+// Show statistic For Contacts
 function showNumbers() {
   var status_cards = document.getElementById("status_cards");
   var totalContact = document.getElementById("totalContact");
@@ -387,6 +420,7 @@ function showNumbers() {
   totalContact.innerHTML = `Manage and organize your ${contactList.length} contacts`;
 }
 
+// Delete Contact By Index
 function deleteContact(index) {
   Swal.fire({
     title: "Delete Contact??",
@@ -410,6 +444,7 @@ function deleteContact(index) {
   });
 }
 
+// Update Contact By Index
 function setValuesForUpdateContact(index) {
   updateContactIndex = index;
   updateContactBtn.classList.remove("hidden");
@@ -424,7 +459,6 @@ function setValuesForUpdateContact(index) {
   favoriteInput.checked = contactList[index].favorite;
   emergencyInput.checked = contactList[index].emergency;
 }
-
 function updateContact() {
   if (validationForm() === true) {
     var contactObject = {
@@ -450,21 +484,7 @@ function updateContact() {
   }
 }
 
-// change favorite  values
-function toggleFavoriteValue(index) {
-  contactList[index].favorite = !contactList[index].favorite;
-  localStorage.setItem("contactList", JSON.stringify(contactList));
-
-  displayContact();
-}
-// change   emergency values
-function toggleEmergencyValue(index) {
-  contactList[index].emergency = !contactList[index].emergency;
-
-  localStorage.setItem("contactList", JSON.stringify(contactList));
-  displayContact();
-}
-
+// Get Contact Name By Index And Get Array Contain this name
 function getFirstCharFromName(index, list) {
   // get first character from name
   var characterName = "";
@@ -479,9 +499,9 @@ function getFirstCharFromName(index, list) {
   return characterName.toLocaleUpperCase();
 }
 
+// Search By Name  Or Email Or Phone
 function search() {
   var searchInput = document.getElementById("search_input").value.trim();
-  console.log(searchInput);
 
   var box = "";
   if (contactList.length == 0) {
@@ -508,7 +528,6 @@ function search() {
                         <span>Emergency</span>
                       </div>`;
       }
-      console.log();
 
       box += `
               <div class="contact_card">
