@@ -28,12 +28,12 @@ if (localStorage.getItem("contactList") !== null) {
 // Open Contact Modal
 function openModal() {
   modalContainer.style.display = "flex";
-  document.body.style.overflow = "hidden";
+  document.body.style.overflowY = "hidden";
 }
 // Close Contact Modal
 function closeModal() {
   modalContainer.style.display = "none";
-  document.body.style.overflow = "scroll";
+  document.body.style.overflowY = "scroll";
   clearInputsForm();
 }
 
@@ -117,7 +117,6 @@ function createContact() {
     });
   }
 }
-
 
 function displayContact() {
   var box = "";
