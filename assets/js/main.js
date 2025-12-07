@@ -34,6 +34,10 @@ function openModal() {
 function closeModal() {
   modalContainer.style.display = "none";
   document.body.style.overflowY = "scroll";
+
+  updateContactBtn.classList.add("hidden");
+  createContactBtn.classList.remove("hidden");
+
   clearInputsForm();
 }
 
@@ -93,8 +97,18 @@ function validationForm() {
 }
 // get Value From Inputs And save It in localStorage
 function createContact() {
-  updateContactBtn.classList.add("hidden");
   if (validationForm() === true) {
+    for (let i = 0; i < contactList.length; i++) {
+      if (contactList[i].phone == contactPhone.value) {
+        Swal.fire({
+          title: "it is same phone!",
+          text: "please inter another phone!",
+          icon: "info",
+        });
+        return;
+      }
+    }
+
     var contactObject = {
       name: contactName.value,
       phone: contactPhone.value,
@@ -258,6 +272,8 @@ function displayContact() {
 function displayFavoriteContact() {
   var box = "";
   var favoriteList = [];
+
+  // Check if ContactList Empty show message
   if (contactList.length == 0) {
     box = `
             <div class="no_cards">
@@ -266,12 +282,14 @@ function displayFavoriteContact() {
               `;
   }
 
+  // Get Favorite Contact And Push It in Array
   for (let i = 0; i < contactList.length; i++) {
     if (contactList[i].favorite == true) {
       favoriteList.push(contactList[i]);
     }
   }
 
+  // Check Is Favorite List is Not Empty And Display Favorite
   if (favoriteList.length > 0) {
     for (let i = 0; i < favoriteList.length; i++) {
       box += `
@@ -316,6 +334,8 @@ function toggleFavoriteValue(index) {
 function displayEmergencyContact() {
   var box = "";
   var emergencyList = [];
+
+  // Check if ContactList Empty show message
   if (contactList.length == 0) {
     box = `
               <div class="no_cards">
@@ -324,12 +344,14 @@ function displayEmergencyContact() {
             `;
   }
 
+  // Get Emergency Contact And Push It in Array
   for (var i = 0; i < contactList.length; i++) {
     if (contactList[i].emergency == true) {
       emergencyList.push(contactList[i]);
     }
   }
 
+  // Check Is Favorite List is Not Empty And Display Favorite
   if (emergencyList.length > 0) {
     for (var i = 0; i < emergencyList.length; i++) {
       box += `
@@ -445,9 +467,9 @@ function deleteContact(index) {
 
 // Update Contact By Index
 function setValuesForUpdateContact(index) {
-  updateContactIndex = index;
   updateContactBtn.classList.remove("hidden");
   createContactBtn.classList.add("hidden");
+  updateContactIndex = index;
   openModal();
   contactName.value = contactList[index].name;
   contactPhone.value = contactList[index].phone;
@@ -458,6 +480,7 @@ function setValuesForUpdateContact(index) {
   favoriteInput.checked = contactList[index].favorite;
   emergencyInput.checked = contactList[index].emergency;
 }
+
 function updateContact() {
   if (validationForm() === true) {
     var contactObject = {
@@ -484,18 +507,33 @@ function updateContact() {
 }
 
 // Get Contact Name By Index And Get Array Contain this name
-function getFirstCharFromName(index, list) {
-  // get first character from name
-  var characterName = "";
-  var characterNameList = list[index].name.split(" ");
 
-  if (characterNameList.length >= 2) {
-    characterName =
-      characterNameList[0].split("")[0] + characterNameList[1].split("")[0];
-  } else {
-    characterName = characterNameList[0].split("")[0];
+/** use if condition and return first 2 character only  */
+// function getFirstCharFromName(index, list) {
+// // get first character from name
+//   var characterName = "";
+//   var characterNameList = list[index].name.split(" ");
+
+//   if (characterNameList.length >= 2) {
+//     characterName = characterNameList[0][0] + characterNameList[1][0];
+//   } else {
+//     characterName = characterNameList[0][0];
+//   }
+//   return characterName.toUpperCase();
+// }
+
+// Get Contact Name By Index And Get Array Contain this name
+
+function getFirstCharFromName(index, list) {
+  var characterNameList = list[index].name.trim().split(" ");
+
+  var characterName = "";
+
+  for (var i = 0; i < characterNameList.length; i++) {
+    characterName += characterNameList[i][0];
   }
-  return characterName.toLocaleUpperCase();
+
+  return characterName.toUpperCase();
 }
 
 // Search By Name  Or Email Or Phone
@@ -568,9 +606,9 @@ function search() {
                       <p>${contactList[i].address}</p>
                     </div>
                     <div class="budges">
-                      <div class="budge budge_${contactList[i].group}">${
-        contactList[i].group
-      }</div>
+                      <div class="budge budge_${contactList[i].group}">
+                        ${contactList[i].group}
+                      </div>
                         ${emergency}
                     </div>
                   </div>
